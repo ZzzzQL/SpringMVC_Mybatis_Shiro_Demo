@@ -1,0 +1,55 @@
+-------------------------------2017年5月25日 创建 系统用户表（sysUserInfo）-------------------------------
+CREATE TABLE `sysUserInfo` (
+	`userId` INT (11) NOT NULL AUTO_INCREMENT COMMENT `用户Id`,
+	`userName` VARCHAR (20) NOT NULL COMMENT `用户名`,
+	`userPwd` VARCHAR (20) NOT NULL COMMENT `密码`,
+	`userAge` INT (11) NOT NULL COMMENT `年龄`,
+	`userRemark` VARCHAR (50) NOT NULL DEFAULT '' COMMENT `备注`,
+	PRIMARY KEY (`userId`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
+
+ALTER TABLE `sysUserInfo` COMMENT='系统用户表';
+
+
+-------------------------------2017年6月3日 创建 系统角色表（sysRole）-------------------------------
+CREATE TABLE `sysRole`(
+	`roleId` INT(11) NOT NULL AUTO_INCREMENT COMMENT '角色Id',
+	`roleName` VARCHAR(20) NOT NULL COMMENT '角色名称',
+	`remark` VARCHAR(70) DEFAULT '' COMMENT '备注',
+	`available` CHAR(1) NOT NULL DEFAULT '0' COMMENT '角色是否可用',
+	PRIMARY KEY (`roleId`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
+ALTER TABLE `sysRole` COMMENT='系统角色表';
+
+-------------------------------2017年6月3日 创建 系统用户角色中间表（sysUserRole）-------------------------------
+CREATE TABLE `sysUserRole`(
+	`userRoleId` INT(11) NOT NULL AUTO_INCREMENT COMMENT '用户角色Id',
+	`userId` INT(11) NOT NULL COMMENT '用户Id',
+	`roleId` INT(11) NOT NULL COMMENT '角色Id',
+	PRIMARY KEY (`userRoleId`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
+ALTER TABLE `sysUserRole` COMMENT='系统用户角色中间表';
+
+-------------------------------2017年6月3日 创建 系统权限资源表（sysResource）-------------------------------
+CREATE TABLE `sysResource`(
+	`resId` INT(11) NOT NULL AUTO_INCREMENT COMMENT '权限资源Id',
+	`resName` VARCHAR(30) NOT NULL COMMENT '权限资源名称',
+	`resURL` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '权限资源URL路径',
+	`resCode` VARCHAR(60) NOT NULL DEFAULT '' COMMENT '权限资源编号',
+	`menuLayer` VARCHAR(12) NOT NULL DEFAULT '' COMMENT '菜单',
+	`resTypeId` INT(2) NOT NULL COMMENT '资源类型Id',
+	`parentId` INT(2) NOT NULL DEFAULT '0' COMMENT '父Id',
+	`available` INT(1) NOT NULL DEFAULT '1' COMMENT '是否拥有',
+	PRIMARY KEY (`resId`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
+ALTER TABLE `sysResource` COMMENT='系统权限资源表';
+
+
+-------------------------------2017年6月3日 创建 系统角色权限中间表（sysRolePermission）-------------------------------
+CREATE TABLE `sysRolePermission`(
+	`rpermissionID` INT(11) NOT NULL AUTO_INCREMENT COMMENT '角色权限Id',
+	`roleId` INT(11) NOT NULL COMMENT '角色Id',
+	`resourceId` INT(11) NOT NULL COMMENT '资源Id',
+	PRIMARY KEY (`rpermissionID`)
+) ENGINE = INNODB DEFAULT CHARSET = utf8;
+ALTER TABLE `sysRolePermission` COMMENT='系统角色权限中间表';
