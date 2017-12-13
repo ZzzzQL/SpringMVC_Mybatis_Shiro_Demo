@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <description>
+        --Spring的配置文件，这里主要配置和业务逻辑有关的--
+        ====如组件扫描包、数据源、事务、shiro的配置等====
+    </description>
+
+    <!-- 启用注解 -->
+    <!--<context:annotation-config />-->
+
+    <!-- 配置组件扫描的包，排除对标有 @Controller 注解的类的扫描，该注解由SpringMVC配置文件扫描 -->
+    <context:component-scan base-package="com.sckj">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <import resource="spring-datasource.xml"/>
+    <import resource="spring-transaction.xml"/>
+
+</beans>
