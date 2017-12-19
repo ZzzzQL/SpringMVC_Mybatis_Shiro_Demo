@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0b3ea97f-ad71-43cd-82ba-7688a47276ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/classmate-1.3.4.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/hibernate-validator-6.0.6.Final.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/hibernate-validator-annotation-processor-6.0.6.Final.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/hibernate-validator-cdi-6.0.6.Final.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/jboss-logging-3.3.1.Final.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/web/WEB-INF/lib/validation-api-2.0.0.Final.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/production/SpringMVC_Mybatis_Shiro_Demo/" />
@@ -727,12 +721,20 @@
       <option name="presentableId" value="Default" />
       <updated>1513645961897</updated>
       <workItem from="1513645964793" duration="1560000" />
-      <workItem from="1513658087833" duration="678000" />
+      <workItem from="1513658087833" duration="740000" />
     </task>
+    <task id="LOCAL-00001" summary="JSR303数据校验jar包">
+      <created>1513658785712</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1513658785712</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2238000" />
+    <option name="totallyTimeSpent" value="2300000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1932" height="1048" extended-state="0" />
@@ -799,6 +801,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="JSR303数据校验jar包" />
+    <option name="LAST_COMMIT_MESSAGE" value="JSR303数据校验jar包" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
