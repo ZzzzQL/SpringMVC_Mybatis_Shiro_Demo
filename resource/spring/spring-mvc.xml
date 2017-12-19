@@ -38,7 +38,7 @@
         <!--配置JSP路径的前缀-->
         <property name="prefix" value="/WEB-INF/views/"/>
         <!--配置JSP路径的后缀-->
-        <property name="suffix" value=".jsp"/>
+        <property name="suffix" value=".html"/>
     </bean>
 
 </beans>

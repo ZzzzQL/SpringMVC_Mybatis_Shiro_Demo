@@ -4,6 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+
+    <!--默认首页定义-->
+    <welcome-file-list>
+        <welcome-file>/login</welcome-file>
+    </welcome-file-list>
+
     <!--1、启动Spring的IOC容器-->
     <!--加载spring的配置文件-->
     <context-param>
