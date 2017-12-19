@@ -6,7 +6,7 @@
     </settings>
 
     <typeAliases>
-        <package name="com.sckj.model"/>
+        <package name="com.sckj.entity"/>
     </typeAliases>
 
     <plugins>

@@ -16,7 +16,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!--配置事务属性-->
+    <!--配置事务增强，事务如何切入  -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <!--根据方法名指定事务的属性-->
         <tx:attributes>
@@ -31,7 +31,7 @@
         </tx:attributes>
     </tx:advice>
 
-    <!--配置事务切入点，以及把事务切入点和事务属性关联起来-->
+    <!--开启基于注解的事务,配置事务切入点，以及把事务切入点和事务属性关联起来-->
     <aop:config>
         <!-- 切入点表达式 -->
         <aop:pointcut id="transactionPointcut" expression="execution(* com.sckj.service.impl.*.*(..))"/>
