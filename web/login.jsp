@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
   String path = request.getContextPath();
   String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -14,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="keywords" content="">
     <meta name="description" content="">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="favicon.ico">
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="static/css/animate.min.css" rel="stylesheet">
@@ -49,11 +48,11 @@
         </div>
       </div>
       <div class="col-sm-5">
-        <form method="post" action="http://www.zi-han.net/theme/hplus/index.html">
+        <form method="post" action="login/login">
           <h4 class="no-margins">登录：</h4>
           <p class="m-t-md">登录到H+后台主题UI框架</p>
-          <input type="text" class="form-control uname" placeholder="用户名" />
-          <input type="password" class="form-control pword m-b" placeholder="密码" />
+          <input type="text" class="form-control uname" placeholder="用户名" name="username"/>
+          <input type="password" class="form-control pword m-b" placeholder="密码" name="password"/>
           <a href="#">忘记密码了？</a>
           <button class="btn btn-success btn-block">登录</button>
         </form>
