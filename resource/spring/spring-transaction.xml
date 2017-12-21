@@ -16,6 +16,9 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <!--配置基于注解的事物-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
     <!--配置事务增强，事务如何切入  -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <!--根据方法名指定事务的属性-->
@@ -38,8 +41,5 @@
         <!-- 将事务切入点和事务属性关联起来 -->
         <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointcut"/>
     </aop:config>
-
-    <!--配置事务注解-->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
 </beans>

@@ -125,7 +125,7 @@ function mk_block_toSource() {
 
 // node
 function mk_block_inspect() {
-  var util = require('util');
+  var util = require('utils');
   return "Markdown.mk_block( " +
           util.inspect(this.toString()) +
           ", " +
