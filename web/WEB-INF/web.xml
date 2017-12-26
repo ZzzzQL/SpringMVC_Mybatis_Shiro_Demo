@@ -4,17 +4,16 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-
-    <!--默认首页定义-->
-    <welcome-file-list>
-        <welcome-file>/login.jsp</welcome-file>
-    </welcome-file-list>
+    <display-name>ssm_demo</display-name>
 
     <!--1、启动Spring的IOC容器-->
     <!--加载spring的配置文件-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/spring/spring-application.xml</param-value>
+        <param-value>
+            classpath:/spring/spring-application.xml,
+            classpath:/spring/spring-shiro.xml
+        </param-value>
     </context-param>
     <!--配置监听器，用于加载Servlet容器时创建IOC容器，并放入Application域中-->
     <listener>
@@ -23,7 +22,7 @@
 
     <!--2、配置SpringMVC的前端控制器，拦截所有请求-->
     <servlet>
-        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-name>SpringMVC</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
@@ -32,7 +31,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-name>SpringMVC</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
@@ -58,7 +57,27 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- 4、使用Rest风格的URI，将页面普通的post请求转为指定的delete或者put请求 -->
+    <!-- 4、配置Shiro的Shiro Filter -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <!-- 设置true由servlet容器控制filter的生命周期 -->
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <!-- 设置spring容器filter的bean id，如果不设置则找与filter-name一致的bean-->
+        <init-param>
+            <param-name>targetBeanName</param-name>
+            <param-value>shiroFilter</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 5、使用Rest风格的URI，将页面普通的post请求转为指定的delete或者put请求 -->
     <filter>
         <filter-name>HiddenHttpMethodFilter</filter-name>
         <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>

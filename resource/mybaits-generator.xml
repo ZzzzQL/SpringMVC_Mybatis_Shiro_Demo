@@ -32,20 +32,20 @@
         targetPackage="test.model"：目标包名
         targetProject="\当前项目（SpringMVC_Mybatis_Shiro_Demo）\src"：目标工程
         -->
-        <javaModelGenerator targetPackage="com.sckj.generator.bean"
+        <javaModelGenerator targetPackage="com.sckj.bean.system"
                             targetProject=".\src">
             <property name="enableSubPackages" value="true" />
             <property name="trimStrings" value="true" />
         </javaModelGenerator>
 
         <!-- sqlMapGenerator：sql映射生成策略： -->
-        <sqlMapGenerator targetPackage="com.sckj.generator.mapper"
+        <sqlMapGenerator targetPackage="com.sckj.mapper.system"
                          targetProject=".\src">
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
 
         <!-- javaClientGenerator:指定mapper接口所在的位置 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.sckj.generator.dao"
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.sckj.dao.system"
                              targetProject=".\src">
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>

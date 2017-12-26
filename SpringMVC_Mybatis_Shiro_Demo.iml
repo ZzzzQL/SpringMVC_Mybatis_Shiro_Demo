@@ -9,9 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src" />
-        </sourceRoots>
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
@@ -22,9 +19,14 @@
         <fileset id="web dispatcherServlet servlet context" name="MVC dispatcherServlet servlet context" removed="true">
           <file>file://$MODULE_DIR$/resource/spring/spring-mvc.xml</file>
         </fileset>
+        <fileset id="web SpringMVC servlet context" name="MVC SpringMVC servlet context" removed="true">
+          <dependency>web application context</dependency>
+          <file>file://$MODULE_DIR$/resource/spring/spring-mvc.xml</file>
+        </fileset>
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/resource/spring/spring-application.xml</file>
           <file>file://$MODULE_DIR$/resource/spring/spring-mvc.xml</file>
+          <file>file://$MODULE_DIR$/resource/spring/spring-shiro.xml</file>
         </fileset>
       </configuration>
     </facet>

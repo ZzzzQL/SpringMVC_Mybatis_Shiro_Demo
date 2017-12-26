@@ -2,23 +2,136 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:myabtis-spring="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 						http://www.springframework.org/schema/context
-						http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+                        http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
-    <description>
-        --Spring的配置文件，这里主要配置和业务逻辑有关的--
-        ====如组件扫描包、数据源、事务、shiro的配置等====
-    </description>
+    <description>   Spring的配置文件:组件扫描包扫描非Controller类、数据源、事务管理、整合Mybatis  </description>
+
+    <!-- 启用注解 -->
+    <context:annotation-config />
 
     <!-- 配置组件扫描的包，排除对标有 @Controller 注解的类的扫描，该注解由SpringMVC配置文件扫描 -->
     <context:component-scan base-package="com.sckj">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
     </context:component-scan>
 
-    <!--配置数据源和整合Mybatis-->
-    <import resource="spring-mybatis.xml"/>
-    <import resource="spring-transaction.xml"/>
+    <!-- 数据源配置, 使用应用服务器的数据库连接池 -->
+    <!-- 读取数据库配置文件 -->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:/db.properties" />
+
+    <!-- 配置数据源：使用阿里德鲁伊数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.mysql.driver}"/>
+        <property name="url" value="${jdbc.mysql.url}" />
+        <property name="username" value="${jdbc.mysql.username}" />
+        <property name="password" value="${jdbc.mysql.password}" />
+        <!-- 初始化连接数量 -->
+        <property name="initialSize" value="${druid.initialSize}" />
+        <!-- 最大并发连接数 -->
+        <property name="maxActive" value="${druid.maxActive}" />
+        <!-- 最大空闲连接数 -->
+        <!--<property name="maxIdle" value="${druid.maxIdle}" />-->
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="${druid.minIdle}" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${druid.maxWait}" />
+        <!-- 超过时间限制是否回收 -->
+        <property name="removeAbandoned" value="${druid.removeAbandoned}" />
+        <!-- 超过时间限制多长 -->
+        <property name="removeAbandonedTimeout" value="${druid.removeAbandonedTimeout}" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+        <!-- 用来检测连接是否有效的sql，要求是一个查询语句-->
+        <property name="validationQuery" value="${druid.validationQuery}" />
+        <!-- 申请连接的时候检测 -->
+        <property name="testWhileIdle" value="${druid.testWhileIdle}" />
+        <!-- 申请连接时执行validationQuery检测连接是否有效，配置为true会降低性能 -->
+        <property name="testOnBorrow" value="${druid.testOnBorrow}" />
+        <!-- 归还连接时执行validationQuery检测连接是否有效，配置为true会降低性能  -->
+        <property name="testOnReturn" value="${druid.testOnReturn}" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}" />
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.maxPoolPreparedStatementPerConnectionSize}" />
+        <!--属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
+                监控统计用的filter:stat
+                日志用的filter:log4j
+               防御SQL注入的filter:wall -->
+        <property name="filters" value="${druid.filters}" />
+    </bean>
+
+    <!-- ============================================= 事务控制的配置 ==============================================-->
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--控制住数据源  -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--配置基于注解的事物-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!--配置事务增强，事务如何切入  -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!--根据方法名指定事务的属性-->
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="select*" read-only="true" />
+            <tx:method name="*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!--开启基于注解的事务,配置事务切入点，以及把事务切入点和事务属性关联起来-->
+    <aop:config proxy-target-class="true">
+        <!-- 切入点表达式 -->
+        <aop:pointcut id="transactionPointcut" expression="execution(* com.sckj.service.system.impl.*.*(..))"/>
+        <!-- 将事务切入点和事务属性关联起来 -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointcut"/>
+    </aop:config>
+
+    <!-- =========================================================================================================-->
+
+
+    <!--==================================== 配置Spring 和 Mybatis整合 ============================================-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--指定数据源-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置Mybatis全局配置文件的位置-->
+        <property name="configLocation" value="classpath:/mybatis/SqlMapConfig.xml"/>
+        <!-- 指定mybatis，mapper文件的位置 -->
+        <property name="mapperLocations" value="classpath*:com/sckj/mapper/**/*Mapper.xml"/>
+    </bean>
+
+    <!--
+        配置扫描器，将mybatis接口的实现加入到ioc容器中两种方式
+        老版配置：
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="basePackage" value="com.sckj.dao"/>
+        </bean>
+     -->
+    <myabtis-spring:scan base-package="com.sckj.dao" />
+
+    <!-- 配置一个可以执行批量的sqlSession：让Mybatis执行批量操作 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+        <!--取值为BATCH设置为批量操作-->
+        <constructor-arg name="executorType" value="BATCH"></constructor-arg>
+    </bean>
+    <!--==========================================================================================================-->
 
 </beans>
