@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%
     String path = request.getContextPath();
     String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -48,7 +49,7 @@
                         <span><img alt="image" class="img-circle" src="static/img/profile_small.jpg" /></span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
+                               <span class="block m-t-xs"><strong class="font-bold"></strong></span>
                                 <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
                                 </span>
                         </a>
@@ -79,7 +80,7 @@
                             <a class="J_menuItem" href="#">角色管理</a>
                         </li>
                         <li>
-                            <a class="J_menuItem" href="#">菜单管理</a>
+                            <a class="J_menuItem" href="sysmenu/menuPage">菜单管理</a>
                         </li>
                         <li>
                             <a class="J_menuItem" href="#">按钮权限</a>

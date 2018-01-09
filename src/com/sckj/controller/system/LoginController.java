@@ -1,9 +1,12 @@
 package com.sckj.controller.system;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,8 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @Version: 1.0
  */
 @Controller
-@RequestMapping(value = "/login")
+@Slf4j
 public class LoginController{
+
+    //登录页面
+    @RequestMapping(value = "/loginPage")
+    public String loginPage(){
+        return "forward:login.jsp";
+    }
 
     //实现登录认证
     @RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -37,6 +46,7 @@ public class LoginController{
                 currentUser.login(token);
             } catch (AuthenticationException ae) {
                 ae.getMessage();
+                return "redirect:/login.jsp";
             }
 
         }

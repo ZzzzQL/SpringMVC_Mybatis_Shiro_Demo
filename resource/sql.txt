@@ -1,92 +1,119 @@
-#-------------------------------2017年12月21日 创建 菜单表（sys_authority）-------------------------------#
-DROP TABLE IF EXISTS `sys_authority`;
-CREATE TABLE `sys_authority` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `data_url` varchar(100) NOT NULL COMMENT '连接路径或方法',
-  `menu_class` varchar(50) NOT NULL COMMENT '菜单样式',
-  `menu_code` varchar(50) NOT NULL COMMENT '菜单编码',
-  `menu_name` varchar(50) NOT NULL COMMENT '菜单名称',
-  `parent_menucode` varchar(50) DEFAULT NULL COMMENT '上级菜单编码',
-  `sequence` bigint(20) DEFAULT '0' COMMENT '排序',
-  `menu_type` varchar(2) DEFAULT '1' COMMENT '菜单类型(1是左导航菜单 2是按钮权限)',
-  `create_time` varchar(30) NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_sys_authority_menu_code` (`menu_code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='菜单表';
-
-
-#-------------------------------2017年12月21日 创建 部门表（sys_department）-------------------------------#
-DROP TABLE IF EXISTS `sys_department`;
-CREATE TABLE `sys_department` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `department_key` varchar(20) NOT NULL COMMENT '部门编码',
-  `department_value` varchar(40) NOT NULL COMMENT '部门名称',
-  `description` varchar(200) DEFAULT NULL COMMENT '描述',
-  `parent_departmentkey` varchar(20) DEFAULT NULL COMMENT '上级部门编码',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_sys_department_department_key` (`department_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='部门表';
-
-#-------------------------------2017年12月21日 创建 角色表（sys_role）-------------------------------#
-DROP TABLE IF EXISTS `sys_role`;
-CREATE TABLE `sys_role` (
-  `role_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `role_key` varchar(30) DEFAULT NULL COMMENT '角色编码',
-  `create_time` varchar(30) DEFAULT NULL COMMENT '创建时间',
-  `description` varchar(200) DEFAULT NULL COMMENT '描述',
-  `role_value` varchar(40) NOT NULL COMMENT '角色名称',
-  `company_id` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='角色表';
-
-#-------------------------------2017年12月21日 创建 角色菜单表（sys_role_authority）-------------------------------#
-DROP TABLE IF EXISTS `sys_role_authority`;
-CREATE TABLE `sys_role_authority` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键编号自增长',
-  `menu_code` varchar(50) NOT NULL COMMENT '菜单编码',
-  `role_key` varchar(40) NOT NULL COMMENT '角色编码',
-  `menu_type` int(11) DEFAULT NULL COMMENT '菜单类型(1是左导航菜单 2是按钮权限)',
+#-------------------------------2017年12月21日 创建 部门表（sys_dept）-------------------------------#
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '部门id',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '部门名称',
+  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级部门id',
+  `level` varchar(200) NOT NULL DEFAULT '' COMMENT '部门层级',
+  `seq` int(11) NOT NULL DEFAULT '0' COMMENT '部门在当前层级下的顺序，由小到大',
+  `remark` varchar(200) DEFAULT '' COMMENT '备注',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次操作时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新操作者的ip地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色菜单表';
-
-#-------------------------------2017年12月21日 创建 角色按钮权限表（sys_role_permission）-------------------------------#
-DROP TABLE IF EXISTS `sys_role_permission`;
-CREATE TABLE `sys_role_permission` (
-  `role_id` int(11) NOT NULL COMMENT '角色主键编号',
-  `permissions` varchar(1000) DEFAULT NULL COMMENT '按钮权限',
-  KEY `FK9q28ewrhntqeipl1t04kh1be7` (`role_id`),
-  CONSTRAINT `FK9q28ewrhntqeipl1t04kh1be7` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`),
-  CONSTRAINT `fk_sys_role_permission_role_id` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色按钮权限表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='部门表';
 
 #-------------------------------2017年12月21日 创建 用户表（sys_user）-------------------------------#
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `login_account` varchar(30) NOT NULL COMMENT '登录账号',
-  `login_pass` varchar(65) NOT NULL COMMENT '登录密码',
-  `user_name` varchar(20) DEFAULT NULL COMMENT '昵称',
-  `user_head` varchar(30) DEFAULT NULL COMMENT '头像',
-  `user_phone` varchar(20) DEFAULT NULL COMMENT '手机',
-  `user_email` varchar(30) DEFAULT NULL COMMENT '邮箱',
-  `user_sex` int(11) DEFAULT NULL COMMENT '性别',
-  `user_birthday` varchar(30) DEFAULT NULL COMMENT '生日',
-  `register_time` varchar(30) NOT NULL COMMENT '注册时间',
-  `department_key` varchar(20) DEFAULT NULL COMMENT '部门编码',
-  PRIMARY KEY (`user_id`),
-  UNIQUE KEY `uk_sys_user_login_account` (`login_account`)
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+  `username` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名称',
+  `telephone` varchar(13) NOT NULL DEFAULT '' COMMENT '手机号',
+  `mail` varchar(20) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `password` varchar(40) NOT NULL DEFAULT '' COMMENT '加密后的密码',
+  `dept_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户所在部门的id',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态，1：正常，0：冻结状态，2：删除',
+  `remark` varchar(200) DEFAULT '' COMMENT '备注',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新者的ip地址',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
-#-------------------------------2017年12月21日 创建 用户角色映射表（sys_user_role）-------------------------------#
-DROP TABLE IF EXISTS `sys_user_role`;
-CREATE TABLE `sys_user_role` (
-  `user_id` bigint(20) NOT NULL COMMENT '用户编号',
-  `role_id` int(20) NOT NULL COMMENT '角色编号',
-  PRIMARY KEY (`user_id`,`role_id`),
-  KEY `FKhh52n8vd4ny9ff4x9fb8v65qx` (`role_id`),
-  CONSTRAINT `FKb40xxfch70f5qnyfw8yme1n1s` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`),
-  CONSTRAINT `FKhh52n8vd4ny9ff4x9fb8v65qx` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`),
-  CONSTRAINT `fk_sys_user_role_role_id` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`role_id`),
-  CONSTRAINT `fk_sys_user_role_user_id` FOREIGN KEY (`user_id`) REFERENCES `sys_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户角色映射表';
+#-------------------------------2017年12月21日 创建 权限模块表（sys_acl_module）-------------------------------#
+DROP TABLE IF EXISTS `sys_acl_module`;
+CREATE TABLE `sys_acl_module` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '权限模块id',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '权限模块名称',
+  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级权限模块id',
+  `level` varchar(200) NOT NULL DEFAULT '' COMMENT '权限模块层级',
+  `seq` int(11) NOT NULL DEFAULT '0' COMMENT '权限模块在当前层级下的顺序，由小到大',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态，1：正常，0：冻结',
+  `remark` varchar(200) DEFAULT '' COMMENT '备注',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次操作时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新操作者的ip地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限模块表';
+
+
+#-------------------------------2017年12月21日 创建 权限表（sys_acl）-------------------------------#
+DROP TABLE IF EXISTS `sys_acl`;
+CREATE TABLE `sys_acl` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '权限id',
+  `code` varchar(20) NOT NULL DEFAULT '' COMMENT '权限码',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '权限名称',
+  `acl_module_id` int(11) NOT NULL DEFAULT '0' COMMENT '权限所在的权限模块id',
+  `url` varchar(100) NOT NULL DEFAULT '' COMMENT '请求的url, 可以填正则表达式',
+  `type` int(11) NOT NULL DEFAULT '3' COMMENT '类型，1：菜单，2：按钮，3：其他',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态，1：正常，0：冻结',
+  `seq` int(11) NOT NULL DEFAULT '0' COMMENT '权限在当前模块下的顺序，由小到大',
+  `remark` varchar(200) DEFAULT '' COMMENT '备注',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一个更新者的ip地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='权限表';
+
+#-------------------------------2017年12月21日 创建 角色表（sys_role）-------------------------------#
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  `name` varchar(20) NOT NULL,
+  `type` int(11) NOT NULL DEFAULT '1' COMMENT '角色的类型，1：管理员角色，2：其他',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态，1：可用，0：冻结',
+  `remark` varchar(200) DEFAULT '' COMMENT '备注',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次更新的时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新者的ip地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='角色表';
+
+#-------------------------------2017年12月21日 创建 角色-用户关联关系表（sys_role_user）-------------------------------#
+DROP TABLE IF EXISTS `sys_role_user`;
+CREATE TABLE `sys_role_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL COMMENT '角色id',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次更新的时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新者的ip地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='角色-用户关联关系表';
+
+#-------------------------------2017年12月21日 创建 角色-权限关联关系表（sys_role_acl）-------------------------------#
+DROP TABLE IF EXISTS `sys_role_acl`;
+CREATE TABLE `sys_role_acl` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL COMMENT '角色id',
+  `acl_id` int(11) NOT NULL COMMENT '权限id',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次更新的时间',
+  `operate_ip` varchar(200) NOT NULL DEFAULT '' COMMENT '最后一次更新者的ip',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='角色-权限关联关系表';
+
+#-------------------------------2017年12月21日 创建 权限相关更新记录表（sys_log）-------------------------------#
+DROP TABLE IF EXISTS `sys_log`;
+CREATE TABLE `sys_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '权限更新的类型，1：部门，2：用户，3：权限模块，4：权限，5：角色，6：角色用户关系，7：角色权限关系',
+  `target_id` int(11) NOT NULL COMMENT '基于type后指定的对象id，比如用户、权限、角色等表的主键；对于角色用户关系、角色权限关系存放角色的Id，因为是针对角色的修改',
+  `old_value` text COMMENT '旧值',
+  `new_value` text COMMENT '新值',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '当前是否复原过，0：没有，1：复原过',
+  `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
+  `operate_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后一次更新的时间',
+  `operate_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新者的ip地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='权限相关更新记录表';

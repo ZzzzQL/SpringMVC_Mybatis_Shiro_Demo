@@ -17,14 +17,19 @@
         <property name="cacheManagerConfigFile" value="classpath:/ehcache/ehcache-shiro.xml"/>
     </bean>
 
-    <!-- 3、配置Realm：直接配置实现了 org.apache.shiro.realm.Realm 接口的bean -->
+    <!-- 3、配置凭证和Realm实现 -->
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <!--配置散列加密方式 为 MD5-->
+        <property name="hashAlgorithmName" value="MD5"/>
+        <!--配置散列加密次数-->
+        <property name="hashIterations" value="1024"/>
+        <!-- 存储的凭据十六进制编码  -->
+        <property name="storedCredentialsHexEncoded" value="true"/>
+    </bean>
+
     <bean id="shiroRealm" class="com.sckj.shiro.realms.ShiroRealm">
-        <!--配置认证匹配器,将登录输入的密码进行 MD5 加密-->
-        <property name="credentialsMatcher">
-            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-                <property name="hashAlgorithmName" value="MD5"/>
-            </bean>
-        </property>
+        <!--将凭证匹配器设置到realm中，realm按照凭证匹配器的要求进行散列（将前台登录页的密码进行MD5加密）-->
+        <property name="credentialsMatcher" ref="credentialsMatcher"/>
     </bean>
 
     <!-- 4、配置Shiro生命周期处理器:可以自动的来调用配置在Spring IOC容器中 shiro bean 的生命周期方法-->
@@ -41,7 +46,7 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/>
         <!--登录页面-->
-        <property name="loginUrl" value="/login.jsp"/>
+        <property name="loginUrl" value="/loginPage"/>
         <!--登录成功页面-->
         <property name="successUrl" value="/index"/>
         <!--没有权限的页面-->
@@ -55,9 +60,8 @@
          -->
         <property name="filterChainDefinitions">
             <value>
-                /login.jsp = anon
                 /favicon.ico = anon
-                /login/login = anon
+                /login = anon
                 /logout = logout
 
                 <!--配置静态资源不被拦截-->
